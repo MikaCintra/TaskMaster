@@ -22,44 +22,56 @@ class _HabitScreenState extends State<HabitScreen> {
     'Saúde': [
       'Beber água',
       'Fazer exercício',
-      'Tomar vitaminas',
-      'Ir para academia',
+      'Dormir 8 horas',
+      'Meditar',
       'Comer frutas',
+      'Alongar',
+      'Caminhar ao ar livre',
     ],
     'Lazer': [
       'Ler livro',
-      'Sair pra comer',
       'Assistir filme',
       'Ouvir música',
+      'Jogar videogame',
       'Desenhar',
+      'Cozinhar algo novo',
+      'Passear no parque',
     ],
     'Casa': [
       'Limpar a casa',
-      'Organizar tarefas',
-      'Lavar roupa',
-      'Cozinhar',
-      'Cuidar das plantas',
+      'Organizar armário',
+      'Regar plantas',
+      'Lavar louça',
+      'Trocar roupa de cama',
+      'Cuidar do lixo',
+      'Passar pano no chão',
     ],
     'Amigos': [
       'Conversar com um amigo',
-      'Marcar um encontro',
+      'Marcar encontro',
       'Enviar mensagem',
-      'Fazer ligação',
-      'Compartilhar uma memória',
+      'Jogar online',
+      'Fazer chamada de vídeo',
+      'Comentar em rede social',
+      'Compartilhar uma lembrança',
     ],
     'Família': [
       'Ligar para os pais',
-      'Ajudar em casa',
       'Almoçar junto',
-      'Planejar viagem',
-      'Brincar com irmãos',
+      'Ajudar em casa',
+      'Planejar passeio',
+      'Contar uma novidade',
+      'Ver fotos antigas',
+      'Assistir TV juntos',
     ],
     'Trabalho': [
       'Planejar semana',
-      'Estudar 1h',
-      'Anotar gratidão',
-      'Meditar 10 minutos',
-      'Dormir cedo',
+      'Responder e-mails',
+      'Revisar tarefas',
+      'Estudar algo novo',
+      'Fazer reunião',
+      'Organizar mesa',
+      'Atualizar agenda',
     ],
   };
 
@@ -83,6 +95,102 @@ class _HabitScreenState extends State<HabitScreen> {
     } else {
       return habitosPorCategoria[categoriaSelecionada] ?? [];
     }
+  }
+
+  void _mostrarDialogoAdicionarHabito() {
+    String? categoriaEscolhida = categorias.firstWhere(
+      (c) => c != 'Todas',
+      orElse: () => 'Saúde',
+    );
+    final TextEditingController nomeController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Adicionar novo hábito'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DropdownButton<String>(
+              value: categoriaEscolhida,
+              isExpanded: true,
+              items: categorias
+                  .where((c) => c != 'Todas')
+                  .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  categoriaEscolhida = value;
+                });
+              },
+            ),
+            TextField(
+              controller: nomeController,
+              decoration: const InputDecoration(labelText: 'Nome do hábito'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final nome = nomeController.text.trim();
+              if (nome.isNotEmpty && categoriaEscolhida != null) {
+                setState(() {
+                  habitosPorCategoria[categoriaEscolhida!]!.add(nome);
+                  _atualizarHabitosSelecionados();
+                });
+              }
+              Navigator.pop(context);
+            },
+            child: const Text('Adicionar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _mostrarDialogoEditarHabito(
+    String categoria,
+    int index,
+    String nomeAtual,
+  ) {
+    final TextEditingController nomeController = TextEditingController(
+      text: nomeAtual,
+    );
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Editar hábito'),
+        content: TextField(
+          controller: nomeController,
+          decoration: const InputDecoration(labelText: 'Novo nome'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final novoNome = nomeController.text.trim();
+              if (novoNome.isNotEmpty) {
+                setState(() {
+                  habitosPorCategoria[categoria]![index] = novoNome;
+                  _atualizarHabitosSelecionados();
+                });
+              }
+              Navigator.pop(context);
+            },
+            child: const Text('Salvar'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -125,9 +233,10 @@ class _HabitScreenState extends State<HabitScreen> {
             ),
           ),
 
-          const SizedBox(height: 12),
-
-          // Cards com imagens
+          const SizedBox(
+            height: 36,
+          ), // Espaçamento maior entre categorias e imagens
+          // Imagens
           SizedBox(
             height: 150,
             child: ListView(
@@ -143,37 +252,66 @@ class _HabitScreenState extends State<HabitScreen> {
             ),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
 
-          // Lista de hábitos com checkboxes
+          // Lista de hábitos
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               itemCount: habitos.length,
               itemBuilder: (context, index) {
-                final letra = habitos[index][0].toUpperCase();
+                final nome = habitos[index];
+                final categoria = habitosPorCategoria.entries
+                    .firstWhere((entry) => entry.value.contains(nome))
+                    .key;
+                final itemIndex = habitosPorCategoria[categoria]!.indexOf(nome);
+
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundColor: Colors.purple[100],
-                    child: Text(
-                      letra,
-                      style: const TextStyle(color: Colors.black),
-                    ),
+                    child: Text(nome[0].toUpperCase()),
                   ),
-                  title: Text(habitos[index]),
-                  trailing: Checkbox(
-                    value: habitosSelecionados[index],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        habitosSelecionados[index] = value ?? false;
-                      });
-                    },
+                  title: Text(nome),
+                  trailing: Wrap(
+                    spacing: 4,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () => _mostrarDialogoEditarHabito(
+                          categoria,
+                          itemIndex,
+                          nome,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          setState(() {
+                            habitosPorCategoria[categoria]!.removeAt(itemIndex);
+                            _atualizarHabitosSelecionados();
+                          });
+                        },
+                      ),
+                      Checkbox(
+                        value: habitosSelecionados[index],
+                        onChanged: (value) {
+                          setState(() {
+                            habitosSelecionados[index] = value ?? false;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 );
               },
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _mostrarDialogoAdicionarHabito,
+        backgroundColor: Colors.deepPurple,
+        child: const Icon(Icons.add),
       ),
     );
   }
