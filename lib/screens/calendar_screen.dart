@@ -17,167 +17,182 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   void initState() {
     super.initState();
-    _tarefasPorData.addAll({
-      "2024-07-03": [
-        {
-          "hora": "10:00",
-          "texto": "10:00 - Estudo de SQL",
-          "icone": "Icons.computer",
-          "cor": "yellow",
-        },
-      ],
-      "2024-07-05": [
-        {
-          "hora": "11:00",
-          "texto": "11:00 - Revisar código Flutter",
-          "icone": "Icons.computer",
-          "cor": "blue",
-        },
-      ],
-      "2024-07-08": [
-        {
-          "hora": "13:00",
-          "texto": "13:00 - Reunião com equipe",
-          "icone": "Icons.emoji_emotions",
-          "cor": "green",
-        },
-      ],
-      "2024-07-10": [
-        {
-          "hora": "09:00",
-          "texto": "09:00 - Fazer backup",
-          "icone": "Icons.cut",
-          "cor": "grey",
-        },
-      ],
-      "2024-07-12": [
-        {
-          "hora": "08:30",
-          "texto": "08:30 - Caminhada matinal",
-          "icone": "Icons.emoji_emotions",
-          "cor": "purple",
-        },
-      ],
-      "2024-07-15": [
-        {
-          "hora": "16:00",
-          "texto": "16:00 - Aula de inglês",
-          "icone": "Icons.computer",
-          "cor": "yellow",
-        },
-      ],
-      "2024-07-17": [
-        {
-          "hora": "15:30",
-          "texto": "15:30 - Atualizar documentação",
-          "icone": "Icons.cut",
-          "cor": "green",
-        },
-      ],
-      "2024-07-19": [
-        {
-          "hora": "10:15",
-          "texto": "10:15 - Consultar professor",
-          "icone": "Icons.emoji_emotions",
-          "cor": "blue",
-        },
-      ],
-      "2024-07-21": [
-        {
-          "hora": "12:00",
-          "texto": "12:00 - Revisar cronograma",
-          "icone": "Icons.cut",
-          "cor": "grey",
-        },
-      ],
-      "2024-07-23": [
-        {
-          "hora": "14:00",
-          "texto": "14:00 - Fazer checklist projeto",
-          "icone": "Icons.computer",
-          "cor": "purple",
-        },
-      ],
-      "2024-07-25": [
-        {
-          "hora": "17:00",
-          "texto": "17:00 - Estudar banco de dados",
-          "icone": "Icons.computer",
-          "cor": "blue",
-        },
-      ],
-      "2024-07-27": [
-        {
-          "hora": "09:30",
-          "texto": "09:30 - Preparar apresentação",
-          "icone": "Icons.emoji_emotions",
-          "cor": "green",
-        },
-      ],
-      "2024-07-28": [
-        {
-          "hora": "11:45",
-          "texto": "11:45 - Leitura técnica",
-          "icone": "Icons.cut",
-          "cor": "yellow",
-        },
-      ],
-      "2024-07-29": [
-        {
-          "hora": "10:00",
-          "texto": "10:00 - Desenvolver protótipo",
-          "icone": "Icons.computer",
-          "cor": "grey",
-        },
-      ],
-      "2024-07-30": [
-        {
-          "hora": "13:20",
-          "texto": "13:20 - Refatorar layout",
-          "icone": "Icons.cut",
-          "cor": "blue",
-        },
-      ],
-      "2024-08-01": [
-        {
-          "hora": "08:00",
-          "texto": "08:00 - Criar testes unitários",
-          "icone": "Icons.computer",
-          "cor": "purple",
-        },
-      ],
-      "2024-08-03": [
-        {
-          "hora": "09:00",
-          "texto": "09:00 - Participar de workshop",
-          "icone": "Icons.emoji_emotions",
-          "cor": "yellow",
-        },
-      ],
-      "2024-08-05": [
-        {
-          "hora": "14:30",
-          "texto": "14:30 - Acompanhar entrega",
-          "icone": "Icons.cut",
-          "cor": "blue",
-        },
-      ],
-      "2024-08-07": [
-        {
-          "hora": "15:00",
-          "texto": "15:00 - Implementar API",
-          "icone": "Icons.computer",
-          "cor": "green",
-        },
-      ],
-      "2024-08-09": [
-        {
-          "hora": "10:30",
-          "texto": "10:30 - Validar requisitos",
-          "icone": "Icons.cut",
-          "cor": "grey",
-        },
-      ],
+    carregarTarefas().then((_) {
+      setState(() {
+        if (_tarefasPorData.isEmpty) {
+          // Adicione dados hardcoded apenas se não houver dados salvos
+          _tarefasPorData.addAll({
+            "2024-07-03": [
+              {
+                "hora": "10:00",
+                "texto": "10:00 - Estudo de SQL",
+                "icone": "Icons.computer",
+                "cor": "yellow",
+              },
+            ],
+            "2024-07-04": [
+              {
+                "hora": "10:00",
+                "texto": "10:00 - Estudo de SQL",
+                "icone": "Icons.computer",
+                "cor": "yellow",
+              },
+            ],
+            "2024-07-05": [
+              {
+                "hora": "11:00",
+                "texto": "11:00 - Revisar código Flutter",
+                "icone": "Icons.computer",
+                "cor": "blue",
+              },
+            ],
+            "2024-07-08": [
+              {
+                "hora": "13:00",
+                "texto": "13:00 - Reunião com equipe",
+                "icone": "Icons.emoji_emotions",
+                "cor": "green",
+              },
+            ],
+            "2024-07-10": [
+              {
+                "hora": "09:00",
+                "texto": "09:00 - Fazer backup",
+                "icone": "Icons.cut",
+                "cor": "grey",
+              },
+            ],
+            "2024-07-12": [
+              {
+                "hora": "08:30",
+                "texto": "08:30 - Caminhada matinal",
+                "icone": "Icons.emoji_emotions",
+                "cor": "purple",
+              },
+            ],
+            "2024-07-15": [
+              {
+                "hora": "16:00",
+                "texto": "16:00 - Aula de inglês",
+                "icone": "Icons.computer",
+                "cor": "yellow",
+              },
+            ],
+            "2024-07-17": [
+              {
+                "hora": "15:30",
+                "texto": "15:30 - Atualizar documentação",
+                "icone": "Icons.cut",
+                "cor": "green",
+              },
+            ],
+            "2024-07-19": [
+              {
+                "hora": "10:15",
+                "texto": "10:15 - Consultar professor",
+                "icone": "Icons.emoji_emotions",
+                "cor": "blue",
+              },
+            ],
+            "2024-07-21": [
+              {
+                "hora": "12:00",
+                "texto": "12:00 - Revisar cronograma",
+                "icone": "Icons.cut",
+                "cor": "grey",
+              },
+            ],
+            "2024-07-23": [
+              {
+                "hora": "14:00",
+                "texto": "14:00 - Fazer checklist projeto",
+                "icone": "Icons.computer",
+                "cor": "purple",
+              },
+            ],
+            "2024-07-25": [
+              {
+                "hora": "17:00",
+                "texto": "17:00 - Estudar banco de dados",
+                "icone": "Icons.computer",
+                "cor": "blue",
+              },
+            ],
+            "2024-07-27": [
+              {
+                "hora": "09:30",
+                "texto": "09:30 - Preparar apresentação",
+                "icone": "Icons.emoji_emotions",
+                "cor": "green",
+              },
+            ],
+            "2024-07-28": [
+              {
+                "hora": "11:45",
+                "texto": "11:45 - Leitura técnica",
+                "icone": "Icons.cut",
+                "cor": "yellow",
+              },
+            ],
+            "2024-07-29": [
+              {
+                "hora": "10:00",
+                "texto": "10:00 - Desenvolver protótipo",
+                "icone": "Icons.computer",
+                "cor": "grey",
+              },
+            ],
+            "2024-07-30": [
+              {
+                "hora": "13:20",
+                "texto": "13:20 - Refatorar layout",
+                "icone": "Icons.cut",
+                "cor": "blue",
+              },
+            ],
+            "2024-08-01": [
+              {
+                "hora": "08:00",
+                "texto": "08:00 - Criar testes unitários",
+                "icone": "Icons.computer",
+                "cor": "purple",
+              },
+            ],
+            "2024-08-03": [
+              {
+                "hora": "09:00",
+                "texto": "09:00 - Participar de workshop",
+                "icone": "Icons.emoji_emotions",
+                "cor": "yellow",
+              },
+            ],
+            "2024-08-05": [
+              {
+                "hora": "14:30",
+                "texto": "14:30 - Acompanhar entrega",
+                "icone": "Icons.cut",
+                "cor": "blue",
+              },
+            ],
+            "2024-08-07": [
+              {
+                "hora": "15:00",
+                "texto": "15:00 - Implementar API",
+                "icone": "Icons.computer",
+                "cor": "green",
+              },
+            ],
+            "2024-08-09": [
+              {
+                "hora": "10:30",
+                "texto": "10:30 - Validar requisitos",
+                "icone": "Icons.cut",
+                "cor": "grey",
+              },
+            ],
+          });
+        }
+      });
     });
   }
 
@@ -190,9 +205,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   Future<void> salvarTarefas() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonString = jsonEncode(_tarefasPorData);
-    await prefs.setString('tarefasPorData', jsonString);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final jsonString = jsonEncode(_tarefasPorData);
+      await prefs.setString('tarefasPorData', jsonString);
+    } catch (e) {
+      print('Erro ao salvar tarefas: $e');
+    }
   }
 
   Future<void> carregarTarefas() async {
