@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
+import 'package:taskmaster/screens/login_screen.dart';
 
 void main() {
-  runApp(TaskMasterApp());
+  runApp(const TaskMasterApp());
 }
 
 class TaskMasterApp extends StatelessWidget {
@@ -11,12 +11,18 @@ class TaskMasterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'TaskMaster',
       theme: ThemeData(
         primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor: Colors.grey[900],
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+        ),
+        textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
       ),
-      home: LoginScreen(),
+      home: const LoginScreen(),
     );
   }
 }
