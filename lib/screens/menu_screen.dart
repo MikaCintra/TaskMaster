@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskmaster/screens/accessibility_screen.dart';
 import 'package:taskmaster/screens/calendar_screen.dart';
+import 'package:taskmaster/screens/profile_screen.dart'; // ✅ Importado
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -17,6 +18,12 @@ class MenuScreen extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const CalendarScreen()),
+        );
+        break;
+      case 'Meu Perfil':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfileScreen()),
         );
         break;
       default:
@@ -50,16 +57,26 @@ class MenuScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Topo com ícone de menu e avatar
+            // Topo com ícone de menu e avatar clicável
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Icon(Icons.menu, size: 28),
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/1.png'),
-                    radius: 20,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ProfileScreen(),
+                        ),
+                      );
+                    },
+                    child: const CircleAvatar(
+                      backgroundImage: AssetImage('assets/images/1.png'),
+                      radius: 20,
+                    ),
                   ),
                 ],
               ),

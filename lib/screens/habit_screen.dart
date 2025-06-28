@@ -9,6 +9,7 @@ class HabitScreen extends StatefulWidget {
 
 class _HabitScreenState extends State<HabitScreen> {
   final List<String> categorias = [
+    'Todas',
     'Saúde',
     'Lazer',
     'Casa',
@@ -17,43 +18,80 @@ class _HabitScreenState extends State<HabitScreen> {
     'Trabalho',
   ];
 
-  final List<String> habitos = [
-    'Beber água',
-    'Fazer exercício',
-    'Tomar vitaminas',
-    'Ler livro',
-    'Acordar cedo',
-    'Limpar a casa',
-    'Sair pra comer',
-    'Ir para academia',
-    'Passear com o cachorro',
-    'Comer frutas',
-    'Meditar 10 minutos',
-    'Anotar gratidão',
-    'Fazer caminhada',
-    'Organizar tarefas',
-    'Planejar semana',
-    'Dormir cedo',
-    'Evitar celular à noite',
-    'Estudar 1h',
-    'Fazer skincare',
-    'Conversar com alguém querido',
-  ];
+  final Map<String, List<String>> habitosPorCategoria = {
+    'Saúde': [
+      'Beber água',
+      'Fazer exercício',
+      'Tomar vitaminas',
+      'Ir para academia',
+      'Comer frutas',
+    ],
+    'Lazer': [
+      'Ler livro',
+      'Sair pra comer',
+      'Assistir filme',
+      'Ouvir música',
+      'Desenhar',
+    ],
+    'Casa': [
+      'Limpar a casa',
+      'Organizar tarefas',
+      'Lavar roupa',
+      'Cozinhar',
+      'Cuidar das plantas',
+    ],
+    'Amigos': [
+      'Conversar com um amigo',
+      'Marcar um encontro',
+      'Enviar mensagem',
+      'Fazer ligação',
+      'Compartilhar uma memória',
+    ],
+    'Família': [
+      'Ligar para os pais',
+      'Ajudar em casa',
+      'Almoçar junto',
+      'Planejar viagem',
+      'Brincar com irmãos',
+    ],
+    'Trabalho': [
+      'Planejar semana',
+      'Estudar 1h',
+      'Anotar gratidão',
+      'Meditar 10 minutos',
+      'Dormir cedo',
+    ],
+  };
 
   late List<bool> habitosSelecionados;
-  String? categoriaSelecionada;
+  String categoriaSelecionada = 'Todas';
 
   @override
   void initState() {
     super.initState();
+    _atualizarHabitosSelecionados();
+  }
+
+  void _atualizarHabitosSelecionados() {
+    final habitos = _habitosFiltrados();
     habitosSelecionados = List<bool>.filled(habitos.length, false);
+  }
+
+  List<String> _habitosFiltrados() {
+    if (categoriaSelecionada == 'Todas') {
+      return habitosPorCategoria.values.expand((list) => list).toList();
+    } else {
+      return habitosPorCategoria[categoriaSelecionada] ?? [];
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
+    final habitos = _habitosFiltrados();
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 16),
@@ -76,9 +114,8 @@ class _HabitScreenState extends State<HabitScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        categoriaSelecionada = isSelected
-                            ? null
-                            : cat; // toggle
+                        categoriaSelecionada = cat;
+                        _atualizarHabitosSelecionados();
                       });
                     },
                     child: Text(cat),
@@ -100,6 +137,8 @@ class _HabitScreenState extends State<HabitScreen> {
                 _buildImageCard('assets/images/1.png'),
                 _buildImageCard('assets/images/2.png'),
                 _buildImageCard('assets/images/3.png'),
+                _buildImageCard('assets/images/4.png'),
+                _buildImageCard('assets/images/5.png'),
               ],
             ),
           ),

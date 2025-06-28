@@ -1,6 +1,6 @@
 name: taskmaster
 description: "A new Flutter project."
-publish_to: 'none' # Remove this line if you want to publish to pub.dev
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
@@ -9,9 +9,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter  # ✅ Adicionado
   google_fonts: any
   cupertino_icons: any
-  intl: ^0.18.1
+  intl: ^0.20.2 # Atualizado para a versão mais recente
   table_calendar: ^3.0.9
   shared_preferences: ^2.2.2
 
@@ -27,4 +29,7 @@ flutter:
     - assets/images/1.png
     - assets/images/2.png
     - assets/images/3.png
+    - assets/images/4.png
+    - assets/images/5.png
     - assets/images/logologo.png
+
